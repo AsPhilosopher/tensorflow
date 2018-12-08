@@ -46,12 +46,13 @@ b2 = tf.Variable(tf.zeros([15, 1]))
 wb2 = tf.matmul(layer1, w2) + b2
 layer2 = tf.nn.relu(wb2)  # 激励函数
 loss = tf.reduce_mean(tf.square(y - layer2))  # 损失函数：标准差
-train_step = tf.train.ProximalGradientDescentOptimizer(0.1).minimize(loss)
+train_step = tf.train.ProximalGradientDescentOptimizer(0.1).minimize(loss)  # 梯度下降 最关键一步
 with tf.Session() as session:
     session.run(tf.global_variables_initializer())
     for i in range(0, 10000):
         session.run(train_step, feed_dict={x: dateNormal, y: priceNormal})
-        pred = session.run(layer2, feed_dict={x: dateNormal})
+        if i == 9999:
+            pred = session.run(layer2, feed_dict={x: dateNormal})
 predPrice = np.zeros([15, 1])
 for i in range(0, 15):
     predPrice[i, 0] = (pred * 3000)[i, 0]
